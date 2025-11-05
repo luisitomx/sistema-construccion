@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-11-05
+
+### Added - Fase 2: Auth Service (In Progress)
+
+#### Microservicio Auth
+
+##### Domain Layer
+- **Entidades**:
+  - `User`: Usuarios del sistema con email único
+  - `Role`: Roles para RBAC (SUPER_ADMIN, ADMIN, PROJECT_MANAGER, ARCHITECT, FIELD_ENGINEER, WORKER)
+  - `Permission`: Permisos granulares (resource:action)
+  - `RefreshToken`: Tokens de refresco con expiración y revocación
+
+- **Value Objects**:
+  - `Email`: Validación y normalización de emails
+
+- **Repository Interfaces**:
+  - `IUserRepository`: Gestión de usuarios
+  - `IRoleRepository`: Gestión de roles
+  - `IRefreshTokenRepository`: Gestión de tokens
+
+##### Application Layer (Partial)
+- **DTOs**:
+  - `RegisterDto`: Registro con validación de contraseña fuerte
+  - `LoginDto`: Login con email/password
+  - `AuthResponseDto`: Respuesta con tokens
+
 ## [0.1.0] - 2025-11-05
 
 ### Added - Fase 1: MVP Core
