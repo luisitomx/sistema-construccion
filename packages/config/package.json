@@ -1,0 +1,21 @@
+{
+  "name": "@construccion/config",
+  "version": "0.1.0",
+  "description": "Shared configurations (TypeScript, ESLint, Prettier, Jest) for Sistema de Construcción",
+  "main": "index.js",
+  "files": [
+    "eslint-preset.js",
+    "tsconfig.json",
+    "prettier.config.js",
+    "jest.config.js"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.0"
+  }
+}
