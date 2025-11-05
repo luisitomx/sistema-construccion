@@ -110,9 +110,9 @@ sistema-construccion/
     └── arquitectura/     # Documentación técnica
 ```
 
-## Estado Actual (Fase 1 - MVP)
+## Estado Actual
 
-### ✅ Completado
+### ✅ Fase 1 Completada - MVP Core
 
 - [x] Setup del monorepo con Turborepo
 - [x] Packages compartidos (types, config, utils)
@@ -125,10 +125,25 @@ sistema-construccion/
   - [x] Swagger documentation
   - [x] Tests unitarios
 
-### 🔄 En Progreso
+### 🔄 Fase 2 En Progreso - Auth & Gateway
 
-- [ ] Auth Service
-- [ ] API Gateway GraphQL
+- [x] **Auth Service** - Fundación implementada
+  - [x] Domain Layer (User, Role, Permission, RefreshToken)
+  - [x] Value Objects (Email)
+  - [x] Repository Interfaces
+  - [x] DTO base (RegisterDto)
+  - [ ] Use Cases (Register, Login, Refresh, Logout)
+  - [ ] JWT Service
+  - [ ] Password Service
+  - [ ] Controllers y Guards
+  - [ ] Seed data (roles y admin)
+
+- [ ] **API Gateway GraphQL**
+  - [ ] GraphQL schema
+  - [ ] Resolvers
+  - [ ] Service clients
+  - [ ] Authentication
+
 - [ ] Web Frontend (Next.js)
 
 ### 📋 Pendiente
