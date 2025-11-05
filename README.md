@@ -203,10 +203,21 @@ npm run seed           # Seed de datos
 
 ## Documentación
 
-- **General**: Ver `CLAUDE.md` para estándares y convenciones
-- **Arquitectura**: Ver `arquitectura-construccion.jsx` para visualización
-- **Microservicio Programa**: Ver `services/programa/README.md`
-- **Docker**: Ver `infra/docker/README.md`
+### General
+- **Estándares del Proyecto**: `CLAUDE.md` - Convenciones y principios
+- **Arquitectura Visual**: `arquitectura-construccion.jsx` - Visualización interactiva
+- **CHANGELOG**: `CHANGELOG.md` - Historial de versiones
+
+### Microservicios
+- **Programa Service**: `services/programa/README.md` - ✅ COMPLETO
+- **Auth Service**: `services/auth/README.md` - ⏳ FUNDACIÓN (35%)
+
+### Infraestructura
+- **Docker Compose**: `infra/docker/README.md` - Setup de servicios
+
+### Guías de Sesiones
+- **Sesión 2 - Resumen**: `docs/SESION_2_RESUMEN.md` - Estado actual y logros
+- **Sesión 3 - Roadmap**: `docs/SESION_3_ROADMAP.md` - Plan detallado próximos pasos
 
 ## Próximos Pasos
 
