@@ -312,6 +312,8 @@ class SyncService {
             s.endDate = schedule.endDate ? new Date(schedule.endDate) : null;
             s.status = schedule.status;
             s.totalDuration = schedule.totalDuration;
+            s.criticalPath = JSON.stringify(schedule.criticalPath || []);
+            s.createdBy = schedule.createdBy || '';
             s.isSynced = true;
           });
         } else {
@@ -321,6 +323,8 @@ class SyncService {
             s.description = schedule.description;
             s.status = schedule.status;
             s.totalDuration = schedule.totalDuration;
+            s.criticalPath = JSON.stringify(schedule.criticalPath || []);
+            s.createdBy = schedule.createdBy || '';
             s.isSynced = true;
           });
         }
@@ -345,6 +349,7 @@ class SyncService {
               a.lateStart = activity.lateStart;
               a.lateFinish = activity.lateFinish;
               a.totalFloat = activity.totalFloat;
+              a.freeFloat = activity.freeFloat || 0;
               a.isCritical = activity.isCritical;
               a.percentComplete = activity.percentComplete || 0;
               a.actualStart = activity.actualStart ? new Date(activity.actualStart) : null;
@@ -366,6 +371,7 @@ class SyncService {
                 a.lateStart = activity.lateStart;
                 a.lateFinish = activity.lateFinish;
                 a.totalFloat = activity.totalFloat;
+                a.freeFloat = activity.freeFloat || 0;
                 a.isCritical = activity.isCritical;
                 a.percentComplete = activity.percentComplete || 0;
               });

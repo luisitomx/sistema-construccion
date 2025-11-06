@@ -7,12 +7,19 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 import { Schedule } from './schedule.entity';
 import { Dependency } from './dependency.entity';
 import { ResourceAssignment } from './resource-assignment.entity';
+import { WorkLog } from './work-log.entity';
+import { Photo } from './photo.entity';
 
 @Entity('activities')
+@Index('idx_activity_schedule_id', ['scheduleId'])
+@Index('idx_activity_is_critical', ['isCritical'])
+@Index('idx_activity_space_id', ['spaceId'])
+@Index('idx_activity_budget_item_id', ['budgetItemId'])
 export class Activity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -91,4 +98,10 @@ export class Activity {
 
   @OneToMany(() => ResourceAssignment, (assignment) => assignment.activity, { cascade: true })
   resourceAssignments: ResourceAssignment[];
+
+  @OneToMany(() => WorkLog, (workLog) => workLog.activity, { cascade: true })
+  workLogs: WorkLog[];
+
+  @OneToMany(() => Photo, (photo) => photo.activity, { cascade: true })
+  photos: Photo[];
 }

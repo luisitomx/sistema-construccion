@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Index,
 } from 'typeorm';
 import { Activity } from './activity.entity';
 
@@ -16,6 +17,9 @@ export enum ScheduleStatus {
 }
 
 @Entity('schedules')
+@Index('idx_schedule_project_id', ['projectId'])
+@Index('idx_schedule_status', ['status'])
+@Index('idx_schedule_created_by', ['createdBy'])
 export class Schedule {
   @PrimaryGeneratedColumn('uuid')
   id: string;

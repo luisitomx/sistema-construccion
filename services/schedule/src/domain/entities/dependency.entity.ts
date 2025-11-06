@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { Activity } from './activity.entity';
 
@@ -15,6 +16,8 @@ export enum DependencyType {
 }
 
 @Entity('dependencies')
+@Index('idx_dependency_predecessor_id', ['predecessorId'])
+@Index('idx_dependency_successor_id', ['successorId'])
 export class Dependency {
   @PrimaryGeneratedColumn('uuid')
   id: string;

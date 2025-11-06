@@ -25,11 +25,14 @@ export class CPMCalculator {
     const predecessorsMap = this.buildPredecessorsMap(activities, dependencies);
     const successorsMap = this.buildSuccessorsMap(activities, dependencies);
 
+    // Build activity lookup map for O(1) access
+    const activityMap = this.buildActivityMap(activities);
+
     // Forward pass: calculate ES and EF
-    this.forwardPass(activities, predecessorsMap, dependencies);
+    this.forwardPass(activities, predecessorsMap, dependencies, activityMap);
 
     // Backward pass: calculate LS and LF
-    const projectDuration = this.backwardPass(activities, successorsMap, dependencies);
+    const projectDuration = this.backwardPass(activities, successorsMap, dependencies, activityMap);
 
     // Calculate float and identify critical activities
     this.calculateFloat(activities);
@@ -98,15 +101,27 @@ export class CPMCalculator {
   }
 
   /**
+   * Build activity lookup map for O(1) access
+   */
+  private buildActivityMap(activities: Activity[]): Map<string, Activity> {
+    const map = new Map<string, Activity>();
+    for (const activity of activities) {
+      map.set(activity.id, activity);
+    }
+    return map;
+  }
+
+  /**
    * Forward pass: Calculate Early Start and Early Finish
    */
   private forwardPass(
     activities: Activity[],
     predecessorsMap: Map<string, Dependency[]>,
-    dependencies: Dependency[]
+    dependencies: Dependency[],
+    activityMap: Map<string, Activity>
   ): void {
     // Topological sort to process activities in order
-    const sorted = this.topologicalSort(activities, dependencies);
+    const sorted = this.topologicalSort(activities, dependencies, activityMap);
 
     for (const activity of sorted) {
       const predecessors = predecessorsMap.get(activity.id) || [];
@@ -118,7 +133,7 @@ export class CPMCalculator {
         // ES = max(predecessor EF + lag) for all predecessors
         let maxES = 0;
         for (const dep of predecessors) {
-          const pred = activities.find(a => a.id === dep.predecessorId)!;
+          const pred = activityMap.get(dep.predecessorId)!; // 🔥 Optimized O(1) lookup
           const es = this.calculateEarlyStart(pred, dep);
           maxES = Math.max(maxES, es);
         }
@@ -150,13 +165,14 @@ export class CPMCalculator {
   private backwardPass(
     activities: Activity[],
     successorsMap: Map<string, Dependency[]>,
-    dependencies: Dependency[]
+    dependencies: Dependency[],
+    activityMap: Map<string, Activity>
   ): number {
     // Find project duration (max EF)
     const projectDuration = Math.max(...activities.map(a => a.earlyFinish));
 
     // Reverse topological sort
-    const sorted = this.topologicalSort(activities, dependencies).reverse();
+    const sorted = this.topologicalSort(activities, dependencies, activityMap).reverse();
 
     for (const activity of sorted) {
       const successors = successorsMap.get(activity.id) || [];
@@ -168,7 +184,7 @@ export class CPMCalculator {
         // LF = min(successor LS - lag) for all successors
         let minLF = Infinity;
         for (const dep of successors) {
-          const succ = activities.find(a => a.id === dep.successorId)!;
+          const succ = activityMap.get(dep.successorId)!; // 🔥 Optimized O(1) lookup
           const lf = this.calculateLateFinish(succ, dep);
           minLF = Math.min(minLF, lf);
         }
@@ -265,7 +281,11 @@ export class CPMCalculator {
   /**
    * Topological sort using Kahn's algorithm
    */
-  private topologicalSort(activities: Activity[], dependencies: Dependency[]): Activity[] {
+  private topologicalSort(
+    activities: Activity[],
+    dependencies: Dependency[],
+    activityMap: Map<string, Activity>
+  ): Activity[] {
     const sorted: Activity[] = [];
     const inDegree = new Map<string, number>();
     const adjList = new Map<string, string[]>();
@@ -299,7 +319,7 @@ export class CPMCalculator {
       for (const neighborId of neighbors) {
         inDegree.set(neighborId, inDegree.get(neighborId)! - 1);
         if (inDegree.get(neighborId) === 0) {
-          const neighbor = activities.find(a => a.id === neighborId)!;
+          const neighbor = activityMap.get(neighborId)!; // 🔥 Optimized O(1) lookup
           queue.push(neighbor);
         }
       }

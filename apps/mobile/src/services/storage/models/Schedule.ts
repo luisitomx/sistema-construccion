@@ -15,6 +15,8 @@ export default class Schedule extends Model {
   @date('end_date') endDate!: Date | null;
   @field('status') status!: string; // DRAFT, BASELINE, IN_PROGRESS, COMPLETED
   @field('total_duration') totalDuration!: number;
+  @field('critical_path') criticalPath!: string; // JSON string array of activity IDs
+  @field('created_by') createdBy!: string;
   @field('is_synced') isSynced!: boolean;
   @readonly @date('created_at') createdAt!: Date;
   @readonly @date('updated_at') updatedAt!: Date;

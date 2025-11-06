@@ -14,6 +14,8 @@ export default appSchema({
         { name: 'end_date', type: 'number', isOptional: true },
         { name: 'status', type: 'string' },
         { name: 'total_duration', type: 'number' },
+        { name: 'critical_path', type: 'string' }, // JSON string array
+        { name: 'created_by', type: 'string' },
         { name: 'is_synced', type: 'boolean' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' },
@@ -34,6 +36,7 @@ export default appSchema({
         { name: 'late_start', type: 'number' },
         { name: 'late_finish', type: 'number' },
         { name: 'total_float', type: 'number' },
+        { name: 'free_float', type: 'number' },
         { name: 'is_critical', type: 'boolean' },
         // Progress
         { name: 'percent_complete', type: 'number' },

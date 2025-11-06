@@ -23,6 +23,7 @@ export default class Activity extends Model {
   @field('late_start') lateStart!: number;
   @field('late_finish') lateFinish!: number;
   @field('total_float') totalFloat!: number;
+  @field('free_float') freeFloat!: number;
   @field('is_critical') isCritical!: boolean;
 
   // Progress tracking

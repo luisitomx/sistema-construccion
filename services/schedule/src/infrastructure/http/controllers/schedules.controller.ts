@@ -18,6 +18,7 @@ import { Activity } from '../../../domain/entities/activity.entity';
 import { Dependency } from '../../../domain/entities/dependency.entity';
 import { CreateScheduleDto } from '../../../application/dtos/create-schedule.dto';
 import { CreateActivityDto } from '../../../application/dtos/create-activity.dto';
+import { UpdateActivityDto } from '../../../application/dtos/update-activity.dto';
 import { CreateDependencyDto } from '../../../application/dtos/create-dependency.dto';
 import { CalculateCriticalPathUseCase } from '../../../application/use-cases/calculate-critical-path.use-case';
 import { GenerateGanttDataUseCase } from '../../../application/use-cases/generate-gantt-data.use-case';
@@ -148,6 +149,40 @@ export class SchedulesController {
       relations: ['resourceAssignments', 'predecessors', 'successors'],
       order: { earlyStart: 'ASC' },
     });
+  }
+
+  @Put(':id/activities/:activityId')
+  @ApiOperation({ summary: 'Update activity progress from mobile app' })
+  async updateActivity(
+    @Param('id', ParseUUIDPipe) scheduleId: string,
+    @Param('activityId', ParseUUIDPipe) activityId: string,
+    @Body() dto: UpdateActivityDto,
+  ): Promise<Activity> {
+    // Verify activity exists and belongs to this schedule
+    const activity = await this.activityRepository.findOne({
+      where: { id: activityId, scheduleId },
+    });
+
+    if (!activity) {
+      throw new NotFoundException(
+        `Activity ${activityId} not found in schedule ${scheduleId}`,
+      );
+    }
+
+    // Update fields from mobile app
+    if (dto.percentComplete !== undefined) {
+      activity.percentComplete = dto.percentComplete;
+    }
+
+    if (dto.actualStart) {
+      activity.actualStart = new Date(dto.actualStart);
+    }
+
+    if (dto.actualFinish) {
+      activity.actualFinish = new Date(dto.actualFinish);
+    }
+
+    return this.activityRepository.save(activity);
   }
 
   @Post(':id/dependencies')
