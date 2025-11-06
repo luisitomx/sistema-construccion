@@ -1,0 +1,130 @@
+version: '3.8'
+
+services:
+  # PostgreSQL - Base de datos principal para datos core
+  postgres:
+    image: postgres:16-alpine
+    container_name: construccion-postgres
+    environment:
+      POSTGRES_DB: construccion_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d construccion_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - construccion-network
+
+  # MongoDB - Base de datos para documentos y logs
+  mongodb:
+    image: mongo:7
+    container_name: construccion-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: construccion_logs
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - construccion-network
+
+  # Redis - Cache y sesiones
+  redis:
+    image: redis:7-alpine
+    container_name: construccion-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - construccion-network
+
+  # pgAdmin - Interfaz web para PostgreSQL (opcional para desarrollo)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: construccion-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@construccion.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - construccion-network
+
+  # MinIO - S3-compatible object storage for DWG/DXF files
+  minio:
+    image: minio/minio:latest
+    container_name: construccion-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"      # API
+      - "9001:9001"      # Web Console
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - construccion-network
+
+  # MinIO Client - Create bucket on startup
+  minio-init:
+    image: minio/mc:latest
+    container_name: construccion-minio-init
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10;
+      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/construccion-drawings --ignore-existing;
+      /usr/bin/mc anonymous set download myminio/construccion-drawings;
+      exit 0;
+      "
+    networks:
+      - construccion-network
+
+volumes:
+  postgres_data:
+    driver: local
+  mongo_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  construccion-network:
+    driver: bridge
