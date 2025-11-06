@@ -11,6 +11,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "seed": "ts-node src/infrastructure/database/seeds/seed.ts",
+    "migrate": "bash -c 'export PGPASSWORD=${DB_PASSWORD:-postgres}; psql -h ${DB_HOST:-localhost} -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-construccion_costs} -f src/infrastructure/database/migrations/001_init_database_precios_unitarios.sql && psql -h ${DB_HOST:-localhost} -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-construccion_costs} -f src/infrastructure/database/migrations/002_insert_insumos_conceptos.sql'",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\""
   },

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-// Entities
+// Entities - Original
 import { Concept } from './domain/entities/concept.entity';
 import { UnitPriceAnalysis } from './domain/entities/unit-price-analysis.entity';
 import { Material } from './domain/entities/material.entity';
@@ -10,6 +10,18 @@ import { Labor } from './domain/entities/labor.entity';
 import { Equipment } from './domain/entities/equipment.entity';
 import { Budget } from './domain/entities/budget.entity';
 import { BudgetItem } from './domain/entities/budget-item.entity';
+
+// Entities - Sistema Dinámico PU
+import { ConceptoBase } from './domain/entities/concepto-base.entity';
+import { InsumoConcepto } from './domain/entities/insumo-concepto.entity';
+import { ManoObra } from './domain/entities/mano-obra.entity';
+import { Rendimiento } from './domain/entities/rendimiento.entity';
+import { HerramientaEquipo } from './domain/entities/herramienta-equipo.entity';
+import { FactorSobrecosto } from './domain/entities/factor-sobrecosto.entity';
+import { PrecioUnitarioCalculado } from './domain/entities/precio-unitario-calculado.entity';
+
+// Modules
+import { PreciosUnitariosModule } from './precios-unitarios/precios-unitarios.module';
 
 // Use Cases
 import { CalculateUnitPriceUseCase } from './application/use-cases/calculate-unit-price.use-case';
@@ -41,6 +53,7 @@ import {
         password: configService.get('DB_PASSWORD', 'postgres'),
         database: configService.get('DB_DATABASE', 'construccion_costs'),
         entities: [
+          // Original entities
           Concept,
           UnitPriceAnalysis,
           Material,
@@ -48,6 +61,14 @@ import {
           Equipment,
           Budget,
           BudgetItem,
+          // Sistema Dinámico PU entities
+          ConceptoBase,
+          InsumoConcepto,
+          ManoObra,
+          Rendimiento,
+          HerramientaEquipo,
+          FactorSobrecosto,
+          PrecioUnitarioCalculado,
         ],
         synchronize: configService.get('NODE_ENV') !== 'production',
         logging: configService.get('NODE_ENV') === 'development',
@@ -62,6 +83,8 @@ import {
       Budget,
       BudgetItem,
     ]),
+    // Import Precios Unitarios Module
+    PreciosUnitariosModule,
   ],
   controllers: [
     ConceptsController,

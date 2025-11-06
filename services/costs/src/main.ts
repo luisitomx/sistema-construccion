@@ -22,13 +22,14 @@ async function bootstrap() {
   // Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Cost Engine API')
-    .setDescription('Budget Calculation and Material Explosion System')
-    .setVersion('1.0')
+    .setDescription('Budget Calculation, Material Explosion and Dynamic Unit Pricing System')
+    .setVersion('2.0')
     .addTag('concepts')
     .addTag('budgets')
     .addTag('materials')
     .addTag('labor')
     .addTag('equipment')
+    .addTag('Precios Unitarios', 'Sistema dinámico de construcción de precios unitarios')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
