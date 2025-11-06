@@ -261,7 +261,7 @@ npm run seed           # Seed de datos
 
 ## Licencia
 
-UNLICENSED - Propiedad privada
+GNU AFFERO GENERAL PUBLIC LICENSE Version 3
 
 ---
 
