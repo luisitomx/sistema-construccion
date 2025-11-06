@@ -46,6 +46,12 @@ export function Navbar() {
               >
                 Espacios
               </Link>
+              <Link
+                href="/precios-unitarios"
+                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-primary-500 text-sm font-medium text-gray-900"
+              >
+                Precios Unitarios
+              </Link>
             </div>
           </div>
 
@@ -113,6 +119,12 @@ export function Navbar() {
               className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-primary-500"
             >
               Espacios
+            </Link>
+            <Link
+              href="/precios-unitarios"
+              className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-primary-500"
+            >
+              Precios Unitarios
             </Link>
           </div>
         </div>
