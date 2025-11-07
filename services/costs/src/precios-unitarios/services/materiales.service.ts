@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConceptoBase } from '../../domain/entities/concepto-base.entity';
 
-interface MaterialResult {
+export interface MaterialResult {
   id: number;
   clave: string;
   nombre: string;

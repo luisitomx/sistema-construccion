@@ -105,7 +105,7 @@ export class CalculateUnitPriceUseCase {
     const totalUnitPrice = directCost + indirectCost + profit;
 
     // 5. Create and save analysis
-    const analysis = this.analysisRepository.create({
+    const analysisData = {
       conceptId: dto.conceptId,
       materials: materialComponents,
       labor: laborComponents,
@@ -118,9 +118,10 @@ export class CalculateUnitPriceUseCase {
       totalUnitPrice,
       validFrom: new Date(dto.validFrom),
       validUntil: dto.validUntil ? new Date(dto.validUntil) : null,
-    });
+    };
 
-    return this.analysisRepository.save(analysis);
+    const analysis = this.analysisRepository.create(analysisData);
+    return await this.analysisRepository.save(analysis);
   }
 
   private calculateDirectCost(

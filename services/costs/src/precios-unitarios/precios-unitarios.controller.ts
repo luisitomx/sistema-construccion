@@ -6,7 +6,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { CalculadoraPuService } from './services/calculadora-pu.service';
-import { MaterialesService } from './services/materiales.service';
+import { MaterialesService, MaterialResult } from './services/materiales.service';
 import { ConceptosService } from './services/conceptos.service';
 import { CalcularPuDto } from './dto/calcular-pu.dto';
 import {
@@ -77,7 +77,7 @@ export class PreciosUnitariosController {
   @ApiOperation({ summary: 'Listar materiales disponibles' })
   @ApiQuery({ name: 'categoria', required: false })
   @ApiQuery({ name: 'subcategoria', required: false })
-  async listarMateriales(@Query() query: MaterialQueryDto) {
+  async listarMateriales(@Query() query: MaterialQueryDto): Promise<MaterialResult[]> {
     return this.materialesService.listarMateriales(
       query.categoria,
       query.subcategoria,
@@ -86,7 +86,7 @@ export class PreciosUnitariosController {
 
   @Get('materiales/categorias')
   @ApiOperation({ summary: 'Listar categorías de materiales' })
-  async obtenerCategorias() {
+  async obtenerCategorias(): Promise<string[]> {
     return this.materialesService.obtenerCategorias();
   }
 
@@ -94,7 +94,7 @@ export class PreciosUnitariosController {
   @ApiOperation({ summary: 'Obtener detalle de un material' })
   @ApiResponse({ status: 200, description: 'Material encontrado' })
   @ApiResponse({ status: 404, description: 'Material no encontrado' })
-  async obtenerMaterial(@Param('clave') clave: string) {
+  async obtenerMaterial(@Param('clave') clave: string): Promise<MaterialResult> {
     const material = await this.materialesService.obtenerMaterial(clave);
     if (!material) {
       throw new Error(`Material ${clave} no encontrado`);

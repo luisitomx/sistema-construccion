@@ -81,7 +81,7 @@ export class UnitPriceAnalysis {
   validFrom: Date;
 
   @Column({ type: 'date', nullable: true })
-  validUntil: Date;
+  validUntil: Date | null;
 
   @CreateDateColumn()
   createdAt: Date;
