@@ -1,0 +1,18 @@
+[phases.setup]
+nixPkgs = ['nodejs-18_x', 'postgresql']
+
+[phases.install]
+cmds = [
+  'corepack enable',
+  'corepack prepare pnpm@latest --activate',
+  'pnpm install --frozen-lockfile'
+]
+
+[phases.build]
+cmds = [
+  'cd services/costs',
+  'pnpm build'
+]
+
+[start]
+cmd = 'cd services/costs && pnpm run start:prod'
